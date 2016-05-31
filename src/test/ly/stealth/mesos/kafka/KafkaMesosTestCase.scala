@@ -1,6 +1,8 @@
 package ly.stealth.mesos.kafka
 
-import java.io.{FileWriter, File}
+import java.io.File
+import org.I0Itec.zkclient.exception.ZkMarshallingError
+import org.I0Itec.zkclient.serialize.ZkSerializer
 import org.I0Itec.zkclient.{ZkClient, IDefaultNameSpace, ZkServer}
 import org.apache.log4j.BasicConfigurator
 import ly.stealth.mesos.kafka.Cluster.FsStorage
@@ -9,6 +11,21 @@ import org.junit.{Ignore, Before, After}
 import scala.concurrent.duration.Duration
 import java.util.concurrent.atomic.AtomicBoolean
 import java.util
+
+
+object ZKStringSerializer extends ZkSerializer {
+
+  @throws(classOf[ZkMarshallingError])
+  def serialize(data : Object) : Array[Byte] = data.asInstanceOf[String].getBytes("UTF-8")
+
+  @throws(classOf[ZkMarshallingError])
+  def deserialize(bytes : Array[Byte]) : Object = {
+    if (bytes == null)
+      null
+    else
+      new String(bytes, "UTF-8")
+  }
+}
 
 @Ignore
 class KafkaMesosTestCase extends net.elodina.mesos.test.MesosTestCase {

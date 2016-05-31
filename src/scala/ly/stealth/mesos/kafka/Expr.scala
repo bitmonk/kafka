@@ -3,10 +3,9 @@ package ly.stealth.mesos.kafka
 import java.util
 import scala.collection.JavaConversions._
 import java.io.PrintStream
-import kafka.utils.{ZKStringSerializer, ZkUtils}
+import kafka.utils.ZkUtils
 import org.I0Itec.zkclient.ZkClient
 import ly.stealth.mesos.kafka.Broker.Task
-import java.lang.Comparable
 import net.elodina.mesos.util.Strings
 
 object Expr {
@@ -166,8 +165,9 @@ object Expr {
     val topics = new util.TreeSet[String]()
 
     val zkClient = newZkClient
+    val zkUtils = ZkUtils.apply(zkClient, false)
     var allTopics: util.List[String] = null
-    try { allTopics = ZkUtils.getAllTopics(zkClient) }
+    try { allTopics = zkUtils.getAllTopics() }
     finally { zkClient.close() }
 
     for (part <- expr.split(",").map(_.trim).filter(!_.isEmpty)) {
@@ -189,5 +189,5 @@ object Expr {
     out.println("  t*        - topics starting with 't'")
   }
 
-  private def newZkClient: ZkClient = new ZkClient(Config.zk, 30000, 30000, ZKStringSerializer)
+  private def newZkClient: ZkClient = ZkUtils.createZkClient(Config.zk, 30000, 30000)
 }

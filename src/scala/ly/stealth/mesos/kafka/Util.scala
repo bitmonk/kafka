@@ -18,10 +18,12 @@
 package ly.stealth.mesos.kafka
 
 import java.util
+
 import scala.collection.JavaConversions._
 import scala.util.parsing.json.JSON
 import java.io.{File, IOException}
 import java.net.{Inet4Address, InetAddress, NetworkInterface}
+
 
 object Util {
   Class.forName(kafka.utils.Json.getClass.getName) // init class
