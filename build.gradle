@@ -11,7 +11,7 @@ version = new File('src/scala/ly/stealth/mesos/kafka/Scheduler.scala').readLines
 jar.archiveName = "kafka-mesos-${version}.jar"
 
 def mesosVersion="0.25.0"
-def kafkaVersion="0.8.1.1"
+def kafkaVersion="0.10.0.0"
 def kafkaScalaVersion="2.10"
 
 repositories {
